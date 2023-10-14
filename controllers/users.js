@@ -1,3 +1,5 @@
+const UserModel = require('../models/user');
+
 const createUser = (req, res) => {
   const userData = req.body;
   return UserModel.create(userData)
