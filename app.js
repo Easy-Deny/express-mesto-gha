@@ -1,6 +1,11 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const UserModel = require('./models/user');
+const createUser = require('./controllers/users');
+const getUser = require('./controllers/users');
+const getUserById = require('./controllers/users');
+const updateUserById = require('./controllers/users');
+const deleteUserById = require('./controllers/users');
 
 mongoose.connect('mongodb://127.0.0.1:27017/mestodb', {
   useNewUrlParser: true,
