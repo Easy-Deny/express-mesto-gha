@@ -9,7 +9,7 @@ const createCard = (req, res) => {
     .catch((err) => {
       console.log(err);
       if (err.name === "ValidationError") {
-        return res.status(400).send(err.message);
+        return res.status(400).send(`Card not added: ${err.message}`);
       }
       return res.status(500).send("Server Error");
     });

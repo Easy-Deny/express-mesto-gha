@@ -13,7 +13,8 @@ mongoose.connect('mongodb://127.0.0.1:27017/mestodb', {
   });
 const app = express();
 const PORT = 3000;
-const userRouter = require('./routes/users')
+const userRouter = require('./routes/users');
+const cardRouter = require('./routes/cards');
 app.use(express.json());
 app.use(express.static('public'));
 app.get('/', (req, res) => {
@@ -30,6 +31,7 @@ app.listen(PORT, () => {
 });
 
 app.use(userRouter);
+app.use(cardRouter);
 
 app.use((req, res, next) => {
   req.user = {
