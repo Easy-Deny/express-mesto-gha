@@ -30,3 +30,11 @@ app.listen(PORT, () => {
 });
 
 app.use(userRouter);
+
+app.use((req, res, next) => {
+  req.user = {
+    _id: '652ac3e0588c4c642defffdc'
+  };
+
+  next();
+});
