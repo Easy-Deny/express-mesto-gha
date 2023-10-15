@@ -26,8 +26,7 @@ const getCards = (req, res) => {
 }
 
 const deleteCardById = (req, res) => {
-  const { id } = req.params;
-  cardModel.findByIdAndRemove(id)
+  cardModel.findByIdAndRemove(req.params.cardId)
     .then((card) => {
       return res.status(200).send(card);
     })
@@ -38,10 +37,24 @@ const deleteCardById = (req, res) => {
       }
       return res.status(500).send("Server Error");
     });
-}
+  }
+  const likeCard = (req, res) => Card.findByIdAndUpdate(
+    req.params.cardId,
+    { $addToSet: { likes: req.user._id } },
+    { new: true },
+  )
+
+  const dislikeCard = (req, res) => Card.findByIdAndUpdate(
+    req.params.cardId,
+    { $pull: { likes: req.user._id } },
+    { new: true },
+  )
+
 
 module.exports = {
   createCard,
   getCards,
   deleteCardById,
+  likeCard,
+  dislikeCard
 }

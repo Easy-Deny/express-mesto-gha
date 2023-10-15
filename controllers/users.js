@@ -1,4 +1,5 @@
 const UserModel = require('../models/user');
+const _id = "652ac3e0588c4c642defffdc";
 
 const createUser = (req, res) => {
   const userData = req.body;
@@ -26,8 +27,8 @@ const getUsers = (req, res) => {
 }
 
 const getUserById = (req, res) => {
-  const { id } = req.params;
-  UserModel.findById(id)
+  //const { id } = req.params;
+  UserModel.findById(req.params.userId)
     .then((user) => {
       if (!user) {
         return res.status(404).send("User not found");
@@ -44,11 +45,33 @@ const getUserById = (req, res) => {
 }
 
 const updateUserById = (req, res) => {
-  return res.status(500).send("Server Error");
+  const {userData} = req.body;
+    return UserModel.findByIdAndUpdate(_id, { userData }, {new: true})
+      .then((data) => {
+        return res.status(201).send(data);
+      })
+      .catch((err) => {
+        console.log(err);
+        if (err.name === "ValidationError") {
+          return res.status(400).send(err.message);
+        }
+        return res.status(500).send("Server Error");
+      });
 }
 
-const deleteUserById = (req, res) => {
-  return res.status(500).send("Server Error");
+const updateUserAvatarById = (req, res) => {
+  const userData = req.body;
+    return UserModel.findByIdAndUpdate(_id, {avatar: userData.avatar}, {new: true})
+      .then((data) => {
+        return res.status(201).send(data);
+      })
+      .catch((err) => {
+        console.log(err);
+        if (err.name === "ValidationError") {
+          return res.status(400).send(err.message);
+        }
+        return res.status(500).send("Server Error");
+      });
 }
 
 module.exports = {
@@ -56,5 +79,5 @@ module.exports = {
   getUsers,
   getUserById,
   updateUserById,
-  deleteUserById
+  updateUserAvatarById
 }
