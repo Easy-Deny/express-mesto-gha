@@ -27,7 +27,6 @@ const getUsers = (req, res) => {
 }
 
 const getUserById = (req, res) => {
-  //const { id } = req.params;
   UserModel.findById(req.params.userId)
     .then((user) => {
       if (!user) {
