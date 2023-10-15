@@ -10,7 +10,7 @@ const createUser = (req, res) => {
     .catch((err) => {
       console.log(err);
       if (err.name === "ValidationError") {
-        return res.status(400).send(err.message);
+        return res.status(400).send(`Incorrect user info error: ${err.name}: ${err.message}`);
       }
       return res.status(500).send("Server Error");
     });
