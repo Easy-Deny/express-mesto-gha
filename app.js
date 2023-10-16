@@ -34,8 +34,8 @@ app.use(userRouter);
 app.use(cardRouter);
 
 app.use((req, res, next) => {
-  req.user = {
-    _id: '652ac3e0588c4c642defffdc'
+ req.user = {
+   _id: '652ac3e0588c4c642defffdc'
   };
 
   next();
