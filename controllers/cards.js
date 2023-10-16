@@ -48,6 +48,13 @@ const likeCard = (req, res) => {
     .then((card) => {
       return res.status(200).send(card);
     })
+    .catch((err) => {
+      console.log(err);
+      if (err.name === "CastError") {
+        return res.status(400).send({ message: `Like not added: ${err.name}: ${err.message}` });
+      }
+      return res.status(500).send("Server Error");
+    });
 }
 
 const dislikeCard = (req, res) => {
