@@ -46,6 +46,9 @@ const likeCard = (req, res) => {
     { new: true },
   )
     .then((card) => {
+      if (!card) {
+        return res.status(404).send({message:`Card not found`});
+      }
       return res.status(200).send(card);
     })
     .catch((err) => {
