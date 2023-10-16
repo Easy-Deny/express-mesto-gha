@@ -1,15 +1,14 @@
 const cardModel = require('../models/card');
 
 const createCard = (req, res) => {
-  const cardData = req.body;
-  return cardModel.create(cardData)
+  return cardModel.create(req.body)
     .then((data) => {
-      return res.status(201).send(data);
+      return res.status(200).send(data);
     })
     .catch((err) => {
       console.log(err);
       if (err.name === "ValidationError") {
-        return res.status(400).send(`Card not added: ${err.message}`);
+        return res.status(400).send({message:`Card not added: ${err.name}: ${err.message}`});
       }
       return res.status(500).send("Server Error");
     });
