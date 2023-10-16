@@ -37,7 +37,7 @@ const getUserById = (req, res) => {
     .catch((err) => {
       console.log(err);
       if (err.name === "CastError") {
-        return res.status(400).send("Invalid Id");
+        return res.status(400).send({message:`Invalid Id Error: ${err.name}: ${err.message}`});
       }
       return res.status(500).send("Server Error");
     });
