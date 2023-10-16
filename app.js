@@ -20,10 +20,10 @@ app.use(express.static('public'));
 app.use((req, res, next) => {
   req.user = {
     _id: '652ac3e0588c4c642defffdc'
-   };
+  };
 
-   next();
- });
+  next();
+});
 app.get('/', (req, res) => {
   const { name } = req.body;
   res.send(name);
@@ -40,5 +40,5 @@ app.listen(PORT, () => {
 app.use(userRouter);
 app.use(cardRouter);
 app.all('*', (req, res) => {
-  res.status(404).send({message:"404! Page not found"});
+  res.status(404).send({ message: "404! Page not found" });
 });
