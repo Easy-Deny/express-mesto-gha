@@ -3,12 +3,12 @@ const cardModel = require('../models/card');
 const createCard = (req, res) => {
   return cardModel.create(req.body)
     .then((data) => {
-      return res.status(200).send(data._id);
+      return res.status(200).send(data);
     })
     .catch((err) => {
       console.log(err);
       if (err.name === "ValidationError") {
-        return res.status(400).send({message:`Card not added: ${err.name}: ${err.message}`});
+        return res.status(400).send({ message: `Card not added: ${err.name}: ${err.message}` });
       }
       return res.status(500).send("Server Error");
     });
@@ -36,19 +36,25 @@ const deleteCardById = (req, res) => {
       }
       return res.status(500).send("Server Error");
     });
-  }
-  const likeCard = (req, res) => Card.findByIdAndUpdate(
+}
+const likeCard = (req, res) => {
+  cardModel.findByIdAndUpdate(
     req.params.cardId,
     { $addToSet: { likes: req.user._id } },
     { new: true },
   )
+    .then((card) => {
+      return res.status(200).send(card);
+    })
+}
 
-  const dislikeCard = (req, res) => Card.findByIdAndUpdate(
+const dislikeCard = (req, res) => {
+  Card.findByIdAndUpdate(
     req.params.cardId,
     { $pull: { likes: req.user._id } },
     { new: true },
   )
-
+}
 
 module.exports = {
   createCard,
