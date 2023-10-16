@@ -44,7 +44,7 @@ const getUserById = (req, res) => {
 }
 
 const updateUserById = (req, res) => {
-    return UserModel.findByIdAndUpdate(req.user,  req.body , {new: true})
+    return UserModel.findByIdAndUpdate(req.user,  req.body, {new: true, runValidators: true})
       .then((data) => {
         return res.status(200).send(data);
       })
