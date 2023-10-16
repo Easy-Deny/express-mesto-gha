@@ -3,7 +3,7 @@ const cardModel = require('../models/card');
 const createCard = (req, res) => {
   return cardModel.create(req.body)
     .then((data) => {
-      return res.status(200).send(data);
+      return res.status(200).send(data._id);
     })
     .catch((err) => {
       console.log(err);
