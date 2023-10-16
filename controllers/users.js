@@ -58,10 +58,9 @@ const updateUserById = (req, res) => {
 }
 
 const updateUserAvatarById = (req, res) => {
-  const userData = req.body;
-    return UserModel.findByIdAndUpdate(_id, {avatar: userData.avatar}, {new: true})
+    return UserModel.findByIdAndUpdate(req.user, {avatar: req.body.avatar}, {new: true})
       .then((data) => {
-        return res.status(201).send(data);
+        return res.status(200).send(data);
       })
       .catch((err) => {
         console.log(err);
