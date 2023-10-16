@@ -1,5 +1,4 @@
 const UserModel = require('../models/user');
-const _id = "652ac3e0588c4c642defffdc";
 
 const createUser = (req, res) => {
   const userData = req.body;

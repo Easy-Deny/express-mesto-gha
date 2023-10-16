@@ -1,9 +1,11 @@
-const cardModel = require('../models/card');
+const CardModel = require('../models/card');
+cid =  '652ac3e0588c4c642defffdc';
 
 const createCard = (req, res) => {
-  return cardModel.create(req.body)
+  const { name, link } = req.body;
+  return CardModel.create({ name, link, owner: req.user})
     .then((data) => {
-      return res.status(200).send(data);
+      return res.status(201).send(data);
     })
     .catch((err) => {
       console.log(err);
@@ -15,7 +17,7 @@ const createCard = (req, res) => {
 }
 
 const getCards = (req, res) => {
-  cardModel.find()
+  CardModel.find()
     .then((cards) => {
       return res.status(200).send(cards);
     })
@@ -25,7 +27,7 @@ const getCards = (req, res) => {
 }
 
 const deleteCardById = (req, res) => {
-  cardModel.findByIdAndRemove(req.params.cardId)
+  CardModel.findByIdAndRemove(req.params.cardId)
     .then((card) => {
       return res.status(200).send(card);
     })
@@ -38,7 +40,7 @@ const deleteCardById = (req, res) => {
     });
 }
 const likeCard = (req, res) => {
-  cardModel.findByIdAndUpdate(
+  CardModel.findByIdAndUpdate(
     req.params.cardId,
     { $addToSet: { likes: req.user._id } },
     { new: true },
@@ -49,7 +51,7 @@ const likeCard = (req, res) => {
 }
 
 const dislikeCard = (req, res) => {
-  Card.findByIdAndUpdate(
+  CardModel.findByIdAndUpdate(
     req.params.cardId,
     { $pull: { likes: req.user._id } },
     { new: true },
