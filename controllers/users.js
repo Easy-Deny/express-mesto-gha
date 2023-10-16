@@ -30,7 +30,7 @@ const getUserById = (req, res) => {
   UserModel.findById(req.params.userId)
     .then((user) => {
       if (!user) {
-        return res.status(404).send({message:`User not found: ${err.name}: ${err.message}`});
+        return res.status(404).send({message:`User not found`});
       }
       return res.status(200).send(user);
     })
