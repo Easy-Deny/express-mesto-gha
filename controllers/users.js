@@ -57,7 +57,7 @@ const updateUserById = (req, res) => {
 }
 
 const updateUserAvatarById = (req, res) => {
-  return UserModel.findByIdAndUpdate(req.user, { avatar: req.body.avatar }, { new: true })
+  return UserModel.findByIdAndUpdate(req.user, { avatar: req.body.avatar }, { new: true, runValidators: true })
     .then((data) => {
       return res.status(200).send(data);
     })
