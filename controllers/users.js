@@ -6,6 +6,11 @@ const createUser = (req, res) => {
     .then((data) => {
       return res.status(201).send(data);
     })
+
+
+
+
+    /////////////////////////////////////////////////
     .catch((err) => {
       console.log(err);
       if (err.name === 'ValidationError') {
