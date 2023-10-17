@@ -1,7 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
 
-
 mongoose.connect('mongodb://127.0.0.1:27017/mestodb', {
   useNewUrlParser: true,
 })
@@ -19,7 +18,7 @@ app.use(express.json());
 app.use(express.static('public'));
 app.use((req, res, next) => {
   req.user = {
-    _id: '652ac3e0588c4c642defffdc'
+    _id: '652ac3e0588c4c642defffdc',
   };
 
   next();
@@ -40,5 +39,5 @@ app.listen(PORT, () => {
 app.use(userRouter);
 app.use(cardRouter);
 app.all('*', (req, res) => {
-  res.status(404).send({ message: "404! Page not found" });
+  res.status(404).send({ message: '404! Page not found' });
 });

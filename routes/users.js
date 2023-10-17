@@ -1,4 +1,4 @@
-const {createUser, getUsers, getUserById, updateUserById, updateUserAvatarById} = require('../controllers/users');
+const { createUser, getUsers, getUserById, updateUserById, updateUserAvatarById } = require('../controllers/users');
 const Router = require('express').Router();
 
 Router.post('/users', createUser);

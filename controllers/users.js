@@ -9,7 +9,7 @@ const createUser = (req, res) => {
     .catch((err) => {
       console.log(err);
       if (err.name === "ValidationError") {
-        return res.status(400).send({message:`Incorrect user info error: ${err.name}: ${err.message}`});
+        return res.status(400).send({ message: `Incorrect user info error: ${err.name}: ${err.message}` });
       }
       return res.status(500).send("Server Error");
     });
@@ -29,51 +29,51 @@ const getUserById = (req, res) => {
   UserModel.findById(req.params.userId)
     .then((user) => {
       if (!user) {
-        return res.status(404).send({message:`User not found`});
+        return res.status(404).send({ message: 'User not found' });
       }
       return res.status(200).send(user);
     })
     .catch((err) => {
       console.log(err);
-      if (err.name === "CastError") {
-        return res.status(400).send({message:`Invalid Id Error: ${err.name}: ${err.message}`});
+      if (err.name === 'CastError') {
+        return res.status(400).send({ message: `Invalid Id Error: ${err.name}: ${err.message}` });
       }
-      return res.status(500).send("Server Error");
+      return res.status(500).send('Server Error');
     });
 }
 
 const updateUserById = (req, res) => {
-    return UserModel.findByIdAndUpdate(req.user,  req.body, {new: true, runValidators: true})
-      .then((data) => {
-        return res.status(200).send(data);
-      })
-      .catch((err) => {
-        console.log(err);
-        if (err.name === "ValidationError") {
-          return res.status(400).send({message:`Incorrect user info: ${err.name}: ${err.message}`});
-        }
-        return res.status(500).send("Server Error");
-      });
+  return UserModel.findByIdAndUpdate(req.user, req.body, { new: true, runValidators: true })
+    .then((data) => {
+      return res.status(200).send(data);
+    })
+    .catch((err) => {
+      console.log(err);
+      if (err.name === 'ValidationError') {
+        return res.status(400).send({ message: `Incorrect user info: ${err.name}: ${err.message}` });
+      }
+      return res.status(500).send('Server Error');
+    });
 }
 
 const updateUserAvatarById = (req, res) => {
-    return UserModel.findByIdAndUpdate(req.user, {avatar: req.body.avatar}, {new: true})
-      .then((data) => {
-        return res.status(200).send(data);
-      })
-      .catch((err) => {
-        console.log(err);
-        if (err.name === "ValidationError") {
-          return res.status(400).send({message:`Incorrect user info error: ${err.name}: ${err.message}`});
-        }
-        return res.status(500).send("Server Error");
-      });
-}
+  return UserModel.findByIdAndUpdate(req.user, { avatar: req.body.avatar }, { new: true })
+    .then((data) => {
+      return res.status(200).send(data);
+    })
+    .catch((err) => {
+      console.log(err);
+      if (err.name === 'ValidationError') {
+        return res.status(400).send({ message: `Incorrect user info error: ${err.name}: ${err.message}` });
+      }
+      return res.status(500).send('Server Error');
+    });
+};
 
 module.exports = {
   createUser,
   getUsers,
   getUserById,
   updateUserById,
-  updateUserAvatarById
-}
+  updateUserAvatarById,
+};
