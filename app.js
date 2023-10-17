@@ -19,11 +19,11 @@ app.use(express.json());
 app.use(express.static('public'));
 app.use((req, res, next) => {
   req.user = {
-    _id: '652ac3e0588c4c642defffdc',
+    _id: '652ac3e0588c4c642defffdc'
   };
 
-  next();
-});
+   next();
+ });
 app.get('/', (req, res) => {
   const { name } = req.body;
   res.send(name);
