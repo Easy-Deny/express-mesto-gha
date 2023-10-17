@@ -8,10 +8,10 @@ const createUser = (req, res) => {
     })
     .catch((err) => {
       console.log(err);
-      if (err.name === "ValidationError") {
+      if (err.name === 'ValidationError') {
         return res.status(400).send({ message: `Incorrect user info error: ${err.name}: ${err.message}` });
       }
-      return res.status(500).send("Server Error");
+      return res.status(500).send('Server Error');
     });
 };
 
@@ -21,7 +21,7 @@ const getUsers = (req, res) => {
       return res.status(200).send(users);
     })
     .catch((err) => {
-      return res.status(500).send("Server Error");
+      return res.status(500).send('Server Error');
     });
 };
 
