@@ -14,6 +14,7 @@ const app = express();
 const PORT = 3000;
 const userRouter = require('./routes/users');
 const cardRouter = require('./routes/cards');
+
 app.use(express.json());
 app.use(express.static('public'));
 app.use((req, res, next) => {
@@ -32,12 +33,11 @@ app.post('/post', (req, res) => {
 
   res.status(201).send(name);
 });
-app.listen(PORT, () => {
-  console.log(`port ${PORT}`);
-});
-
 app.use(userRouter);
 app.use(cardRouter);
 app.all('*', (req, res) => {
   res.status(404).send({ message: '404! Page not found' });
+});
+app.listen(PORT, () => {
+  console.log(`port ${PORT}`);
 });

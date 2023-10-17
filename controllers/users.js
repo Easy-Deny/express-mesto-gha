@@ -13,7 +13,7 @@ const createUser = (req, res) => {
       }
       return res.status(500).send("Server Error");
     });
-}
+};
 
 const getUsers = (req, res) => {
   UserModel.find()
@@ -23,7 +23,7 @@ const getUsers = (req, res) => {
     .catch((err) => {
       return res.status(500).send("Server Error");
     });
-}
+};
 
 const getUserById = (req, res) => {
   UserModel.findById(req.params.userId)
@@ -40,7 +40,7 @@ const getUserById = (req, res) => {
       }
       return res.status(500).send('Server Error');
     });
-}
+};
 
 const updateUserById = (req, res) => {
   return UserModel.findByIdAndUpdate(req.user, req.body, { new: true, runValidators: true })
