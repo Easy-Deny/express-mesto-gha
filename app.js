@@ -19,19 +19,12 @@ app.use(express.json());
 app.use(express.static('public'));
 app.use((req, res, next) => {
   req.user = {
-    _id: '652ac3e0588c4c642defffdc'
-  };
-
-   next();
- });
+    _id: '652ac3e0588c4c642defffdc',
+  }; next();
+});
 app.get('/', (req, res) => {
   const { name } = req.body;
   res.send(name);
-});
-app.post('/post', (req, res) => {
-  const { name } = req.body;
-
-  res.status(201).send(name);
 });
 app.use(userRouter);
 app.use(cardRouter);
