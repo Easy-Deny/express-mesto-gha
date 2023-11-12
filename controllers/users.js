@@ -1,20 +1,27 @@
 const UserModel = require('../models/user');
+const bcrypt = require('bcryptjs');
+//const { MongoServerError } = require('mongoose').Error;
 
 const createUser = (req, res) => {
-  const userData = req.body;
-  return UserModel.create(userData)
-    .then((data) => {
-      return res.status(201).send(data);
-    })
-    .catch((err) => {
-      console.log(err);
-      if (err.name === 'ValidationError') {
-        return res.status(400).send({ message: `Incorrect user info error: ${err.name}: ${err.message}` });
-      }
-      return res.status(500).send('Server Error');
-    });
+  const { name, about, avatar, email, password } = req.body;
+  bcrypt.hash(password, 10)
+    .then((hash) =>{
+      UserModel.create({ name, about, avatar, email, password: hash })
+        .then((data) => {
+          return res.status(201).send(data);
+        })
+        .catch((err) => {
+          console.log(err);
+          if (err.name === 'ValidationError') {
+            return res.status(400).send({ message: `Incorrect user info error: ${err.name}: ${err.message}` });
+          }
+          if (err.code === 11000) {
+            return res.status(409).send({ message: `user with an email address exists: ${err.name}: ${err.message}` });
+          }
+          return res.status(500).send('Server Error');
+        });
+      });
 };
-
 const getUsers = (req, res) => {
   UserModel.find()
     .then((users) => {
