@@ -5,23 +5,43 @@ const bcrypt = require('bcryptjs');
 const createUser = (req, res) => {
   const { name, about, avatar, email, password } = req.body;
   bcrypt.hash(password, 10)
-    .then((hash) =>{
-      UserModel.create({ name, about, avatar, email, password: hash })
-        .then((data) => {
-          return res.status(201).send(data);
-        })
-        .catch((err) => {
-          console.log(err);
-          if (err.name === 'ValidationError') {
-            return res.status(400).send({ message: `Incorrect user info error: ${err.name}: ${err.message}` });
-          }
-          if (err.code === 11000) {
-            return res.status(409).send({ message: `user with an email address exists: ${err.name}: ${err.message}` });
-          }
-          return res.status(500).send('Server Error');
-        });
-      });
+    .then((hash) => {
+      return UserModel.create({ name, about, avatar, email, password: hash })
+    })
+    .then((data) => {
+      return res.status(201).send(data);
+    })
+    .catch((err) => {
+      console.log(err);
+      if (err.name === 'ValidationError') {
+        return res.status(400).send({ message: `Incorrect user info error: ${err.name}: ${err.message}` });
+      }
+      if (err.code === 11000) {
+        return res.status(409).send({ message: `user with an email address exists: ${err.name}: ${err.message}` });
+      }
+      return res.status(500).send('Server Error');
+    });
 };
+
+const login = (req, res) => {
+  const { email, password } = req.body;
+  UserModel.findOne({ email })
+    .then((user) => {
+      if (!user) {
+        return res.status(403).send({ message: `user not found` });
+      }
+      bcrypt.compare(password, user.password, function (err, isValidPassword) {
+        if (!isValidPassword) {
+          return res.status(401).send({ message: `password is not correct` });
+        }
+        return res.status(200).send(email);
+      })
+    })
+    .catch((err) => {
+      return res.status(500).send('Server Error');
+    });
+};
+
 const getUsers = (req, res) => {
   UserModel.find()
     .then((users) => {
@@ -83,4 +103,5 @@ module.exports = {
   getUserById,
   updateUserById,
   updateUserAvatarById,
+  login,
 };
