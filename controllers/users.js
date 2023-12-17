@@ -1,5 +1,7 @@
 const UserModel = require('../models/user');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const { JWT_SECRET = "SECRET_KEY" }= process.env;
 //const { MongoServerError } = require('mongoose').Error;
 
 const createUser = (req, res) => {
@@ -9,7 +11,7 @@ const createUser = (req, res) => {
       return UserModel.create({ name, about, avatar, email, password: hash })
     })
     .then((data) => {
-      return res.status(201).send(data);
+      return res.status(201).send(data._id);
     })
     .catch((err) => {
       console.log(err);
@@ -25,7 +27,7 @@ const createUser = (req, res) => {
 
 const login = (req, res) => {
   const { email, password } = req.body;
-  UserModel.findOne({ email })
+  UserModel.findOne({ email }).select('+password')
     .then((user) => {
       if (!user) {
         return res.status(403).send({ message: `user not found` });
@@ -34,7 +36,8 @@ const login = (req, res) => {
         if (!isValidPassword) {
           return res.status(401).send({ message: `password is not correct` });
         }
-        return res.status(200).send(email);
+        const token = jwt.sign({foo: 'bar'}, JWT_SECRET);
+        return res.status(200).send({token});
       })
     })
     .catch((err) => {
