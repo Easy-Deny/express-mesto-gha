@@ -36,7 +36,7 @@ const login = (req, res) => {
         if (!isValidPassword) {
           return res.status(401).send({ message: `password is not correct` });
         }
-        const token = jwt.sign({foo: 'bar'}, JWT_SECRET);
+        const token = jwt.sign({_id: user._id, email: user.email}, JWT_SECRET);
         return res.status(200).send({token});
       })
     })
