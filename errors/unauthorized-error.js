@@ -4,3 +4,4 @@ class UnauthorizedError extends Error {
     this.code = 11000;
   }
 }
+module.exports = UnauthorizedError;

@@ -1,4 +1,5 @@
-const { isAuthorized } = require("../utils/jwt")
+const { isAuthorized } = require("../utils/jwt");
+const UnauthorizedError =require('../errors/unauthorized-error');
 
 const auth = (req, res, next) => {
   const token = req.headers.authorization;
