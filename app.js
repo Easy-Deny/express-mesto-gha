@@ -28,10 +28,10 @@ app.get('/', (req, res) => {
   const { name } = req.body;
   res.send(name);
 });
-app.use(auth);
+//app.use(auth);
 app.use(userRouter);
 app.use(cardRouter);
-app.use(errorHandler);
+//app.use(errorHandler);
 app.all('*', (req, res) => {
   res.status(404).send({ message: '404! Page not found' });
 });
