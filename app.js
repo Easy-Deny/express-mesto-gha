@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const auth = require('./middlewares/auth')
+const auth = require('./middlewares/auth');
+const errorHandler = require('./errors/error-handler');
 
 mongoose.connect('mongodb://127.0.0.1:27017/mestodb', {
   useNewUrlParser: true,
@@ -30,6 +31,7 @@ app.get('/', (req, res) => {
 app.use(auth);
 app.use(userRouter);
 app.use(cardRouter);
+app.use(errorHandler);
 app.all('*', (req, res) => {
   res.status(404).send({ message: '404! Page not found' });
 });
