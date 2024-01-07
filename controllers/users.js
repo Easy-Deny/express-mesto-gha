@@ -1,8 +1,8 @@
 const UserModel = require('../models/user');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const { JWT_SECRET = "SECRET_KEY" }= process.env;
-//const { MongoServerError } = require('mongoose').Error;
+const { JWT_SECRET = "SECRET_KEY" } = process.env;
+const { getJwtToken, isAuthorized } = require('../utils/jwt')
 
 const createUser = (req, res) => {
   const { name, about, avatar, email, password } = req.body;
@@ -36,8 +36,8 @@ const login = (req, res) => {
         if (!isValidPassword) {
           return res.status(401).send({ message: `password is not correct` });
         }
-        const token = jwt.sign({_id: user._id, email: user.email}, JWT_SECRET);
-        return res.status(200).send({token});
+        const token = getJwtToken({ _id: user._id, email: user.email });
+        return res.status(200).send({ token });
       })
     })
     .catch((err) => {
@@ -46,7 +46,9 @@ const login = (req, res) => {
 };
 
 const getUsers = (req, res) => {
-  UserModel.find()
+  const token = req.headers.authorization;
+  if (!isAuthorized(token)) return res.status(401).send({ message: 'not autorization' });
+  return UserModel.find()
     .then((users) => {
       return res.status(200).send(users);
     })
