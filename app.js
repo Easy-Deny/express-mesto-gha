@@ -1,5 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const auth = require('./middlewares/auth')
 
 mongoose.connect('mongodb://127.0.0.1:27017/mestodb', {
   useNewUrlParser: true,
@@ -26,6 +27,7 @@ app.get('/', (req, res) => {
   const { name } = req.body;
   res.send(name);
 });
+app.use(auth);
 app.use(userRouter);
 app.use(cardRouter);
 app.all('*', (req, res) => {

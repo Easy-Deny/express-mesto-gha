@@ -46,8 +46,8 @@ const login = (req, res) => {
 };
 
 const getUsers = (req, res) => {
-  const token = req.headers.authorization;
-  if (!isAuthorized(token)) return res.status(401).send({ message: 'not autorization' });
+  //const token = req.headers.authorization;
+  //if (!isAuthorized(token)) return res.status(401).send({ message: 'not autorization' });
   return UserModel.find()
     .then((users) => {
       return res.status(200).send(users);
