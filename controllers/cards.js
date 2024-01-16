@@ -1,4 +1,7 @@
 const CardModel = require('../models/card');
+const BadRequestError = require('../errors/badrequest-error');
+const NotFoundError = require('../errors/not-found-error');
+
 
 const createCard = (req, res) => {
   const { name, link } = req.body;
@@ -9,9 +12,12 @@ const createCard = (req, res) => {
     .catch((err) => {
       console.log(err);
       if (err.name === 'ValidationError') {
-        return res.status(400).send({ message: `Card not added: ${err.name}: ${err.message}` });
+        next(new BadRequestError(`Card not added: ${err.name}: ${err.message}`));
+        //return res.status(400).send({ message: `Card not added: ${err.name}: ${err.message}` });
+      } else {
+        next(err);
       }
-      return res.status(500).send('Server Error');
+      //return res.status(500).send('Server Error');
     });
 }
 
@@ -29,16 +35,20 @@ const deleteCardById = (req, res) => {
   CardModel.findByIdAndRemove(req.params.cardId)
     .then((card) => {
       if (!card) {
-        return res.status(404).send({ message: 'Card not found' });
+        throw new NotFoundError('Card not found');
+        //return res.status(404).send({ message: 'Card not found' });
       }
       return res.status(200).send(card);
     })
     .catch((err) => {
       console.log(err);
       if (err.name === 'CastError') {
-        return res.status(400).send({ message: `Invalid Card Id: ${err.name}: ${err.message}` });
+        next(new BadRequestError(`Invalid Card Id: ${err.name}: ${err.message}`));
+        //return res.status(400).send({ message: `Invalid Card Id: ${err.name}: ${err.message}` });
+      } else {
+        next(err);
       }
-      return res.status(500).send('Server Error');
+      //return res.status(500).send('Server Error');
     });
 }
 const likeCard = (req, res) => {
@@ -49,15 +59,19 @@ const likeCard = (req, res) => {
   )
     .then((card) => {
       if (!card) {
-        return res.status(404).send({ message: 'Card not found' });
+        throw new NotFoundError('Card not found');
+        //return res.status(404).send({ message: 'Card not found' });
       }
       return res.status(200).send(card);
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        return res.status(400).send({ message: `Like not added: ${err.name}: ${err.message}` });
+        next(new BadRequestError(`Like not added: ${err.name}: ${err.message}`));
+        //return res.status(400).send({ message: `Like not added: ${err.name}: ${err.message}` });
+      } else {
+        next(err);
       }
-      return res.status(500).send('Server Error');
+      //return res.status(500).send('Server Error');
     });
 }
 
@@ -69,16 +83,20 @@ const dislikeCard = (req, res) => {
   )
     .then((card) => {
       if (!card) {
-        return res.status(404).send({ message: 'Card not found' });
+        throw new NotFoundError('Card not found');
+       //return res.status(404).send({ message: 'Card not found' });
       }
       return res.status(200).send(card);
     })
     .catch((err) => {
       console.log(err);
       if (err.name === 'CastError') {
-        return res.status(400).send({ message: `Like not deleted: ${err.name}: ${err.message}` });
+        next(new BadRequestError(`Like not deleted: ${err.name}: ${err.message}`));
+       // return res.status(400).send({ message: `Like not deleted: ${err.name}: ${err.message}` });
+      } else {
+        next(err);
       }
-      return res.status(500).send('Server Error');
+      //return res.status(500).send('Server Error');
     });
 };
 
