@@ -3,8 +3,11 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { JWT_SECRET = "SECRET_KEY" } = process.env;
 const { getJwtToken, isAuthorized } = require('../utils/jwt')
+const BadRequestError = require('../errors/badrequest-error');
+const NotFoundError = require('../errors/not-found-error');
+const NotRightError = require('../errors/not-right-error');
 
-const createUser = (req, res) => {
+const createUser = (req, res, next) => {
   const { name, about, avatar, email, password } = req.body;
   bcrypt.hash(password, 10)
     .then((hash) => {
@@ -16,25 +19,29 @@ const createUser = (req, res) => {
     .catch((err) => {
       console.log(err);
       if (err.name === 'ValidationError') {
-        return res.status(400).send({ message: `Incorrect user info error: ${err.name}: ${err.message}` });
+        next(new BadRequestError(`Incorrect user info error: ${err.name}: ${err.message}`));
+        //return res.status(400).send({ message: `Incorrect user info error: ${err.name}: ${err.message}` });
       }
       if (err.code === 11000) {
         return res.status(409).send({ message: `user with an email address exists: ${err.name}: ${err.message}` });
       }
-      return res.status(500).send('Server Error');
+      next(err);
+      //return res.status(500).send('Server Error');
     });
 };
 
-const login = (req, res) => {
+const login = (req, res, next) => {
   const { email, password } = req.body;
   UserModel.findOne({ email }).select('+password')
     .then((user) => {
       if (!user) {
-        return res.status(403).send({ message: `user not found` });
+        throw new NotRightError(`user not found`);
+        //return res.status(401).send({ message: `user not found` });
       }
       bcrypt.compare(password, user.password, function (err, isValidPassword) {
         if (!isValidPassword) {
-          return res.status(401).send({ message: `password is not correct` });
+          throw new NotRightError(`password is not correct`);
+          //return res.status(401).send({ message: `password is not correct` });
         }
         const token = getJwtToken({ _id: user._id, email: user.email });
         return res.status(200).send({ token });
@@ -45,7 +52,7 @@ const login = (req, res) => {
     });
 };
 
-const getUsers = (req, res) => {
+const getUsers = (req, res, next) => {
   //const token = req.headers.authorization;
   //if (!isAuthorized(token)) return res.status(401).send({ message: 'not autorization' });
   return UserModel.find()
@@ -57,24 +64,27 @@ const getUsers = (req, res) => {
     });
 };
 
-const getUserById = (req, res) => {
+const getUserById = (req, res, next) => {
   UserModel.findById(req.params.userId)
     .then((user) => {
       if (!user) {
-        return res.status(404).send({ message: 'User not found' });
+        throw new NotFoundError('User not found');
+        //return res.status(404).send({ message: 'User not found' });
       }
       return res.status(200).send(user);
     })
     .catch((err) => {
       console.log(err);
       if (err.name === 'CastError') {
-        return res.status(400).send({ message: `Invalid Id Error: ${err.name}: ${err.message}` });
+        next(new BadRequestError(`Invalid Id Error: ${err.name}: ${err.message}`));
+        //return res.status(400).send({ message: `Invalid Id Error: ${err.name}: ${err.message}` });
       }
-      return res.status(500).send('Server Error');
+      next(err);
+      //return res.status(500).send('Server Error');
     });
 };
 
-const updateUserById = (req, res) => {
+const updateUserById = (req, res, next) => {
   return UserModel.findByIdAndUpdate(req.user, req.body, { new: true, runValidators: true })
     .then((data) => {
       return res.status(200).send(data);
@@ -82,13 +92,15 @@ const updateUserById = (req, res) => {
     .catch((err) => {
       console.log(err);
       if (err.name === 'ValidationError') {
-        return res.status(400).send({ message: `Incorrect user info: ${err.name}: ${err.message}` });
+        next(new BadRequestError(`Incorrect user info: ${err.name}: ${err.message}`));
+        //return res.status(400).send({ message: `Incorrect user info: ${err.name}: ${err.message}` });
       }
-      return res.status(500).send('Server Error');
+      next(err);
+      //return res.status(500).send('Server Error');
     });
 }
 
-const updateUserAvatarById = (req, res) => {
+const updateUserAvatarById = (req, res, next) => {
   return UserModel.findByIdAndUpdate(req.user, { avatar: req.body.avatar }, { new: true, runValidators: true })
     .then((data) => {
       return res.status(200).send(data);
@@ -96,9 +108,11 @@ const updateUserAvatarById = (req, res) => {
     .catch((err) => {
       console.log(err);
       if (err.name === 'ValidationError') {
-        return res.status(400).send({ message: `Incorrect user info error: ${err.name}: ${err.message}` });
+        next(new BadRequestError(`Incorrect user info error: ${err.name}: ${err.message}`));
+        //return res.status(400).send({ message: `Incorrect user info error: ${err.name}: ${err.message}` });
       }
-      return res.status(500).send('Server Error');
+      next(err);
+      //return res.status(500).send('Server Error');
     });
 };
 
