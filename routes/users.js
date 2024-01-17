@@ -18,7 +18,7 @@ Router.post('/signup', celebrate({
     avatar: Joi.string().required(),
     email: Joi.string().required().email(),
     password: Joi.string().required(),
-  }),
+  }).unknown(true),
 }), createUser);
 Router.use(auth);
 Router.get('/users', getUsers);
@@ -34,8 +34,8 @@ Router.patch('/users/me', celebrate({
 }), updateUserById);
 Router.patch('/users/me/avatar', celebrate({
   body: Joi.object().keys({
-    userId: Joi.string().required(),
-  }),
+    avatar: Joi.string().required(),
+  }).unknown(true),
 }), updateUserAvatarById);
 Router.use(errorHandler);
 module.exports = Router;
