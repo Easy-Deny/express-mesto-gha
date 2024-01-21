@@ -27,15 +27,11 @@ Router.get('/users/:userId', celebrate({
   }),
 }), getUserById);
 Router.get('/users', getUsers);
-Router.patch('/users/me', celebrate({
-  body: Joi.object().keys({
-    userId: Joi.string().required(),
-  }),
-}), updateUserById);
+Router.patch('/users/me', updateUserById);
 Router.patch('/users/me/avatar', celebrate({
   body: Joi.object().keys({
-    avatar: Joi.string().required(),
-  }).unknown(true),
+    avatar: Joi.string().required().pattern(/^(https?:\/\/)?([\w\.]+)\.([a-z]{2,6}\.?)(\/[\w\.]*)*\/?$/),
+  }),
 }), updateUserAvatarById);
 Router.use(errorHandler);
 module.exports = Router;
