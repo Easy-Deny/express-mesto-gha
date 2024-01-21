@@ -1,10 +1,9 @@
 const jwt = require('jsonwebtoken');
+
 const { JWT_SECRET = 'SECRET_KEY' } = process.env;
 const UserModel = require('../models/user');
 
-const getJwtToken = (payload) => {
-  return jwt.sign(payload, JWT_SECRET);
-}
+const getJwtToken = (payload) => jwt.sign(payload, JWT_SECRET);
 
 const isAuthorized = (token) => {
   return jwt.verify(token, JWT_SECRET, function (err, decoded) {
@@ -17,7 +16,8 @@ const isAuthorized = (token) => {
       .catch((err) => { return false })
   });
 }
+
 module.exports = {
   getJwtToken,
   isAuthorized,
-}
+};

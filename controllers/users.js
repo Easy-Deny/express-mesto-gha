@@ -1,6 +1,6 @@
 const bcrypt = require('bcryptjs');
 const UserModel = require('../models/user');
-const { getJwtToken } = require('../utils/jwt')
+const { getJwtToken } = require('../utils/jwt');
 const BadRequestError = require('../errors/badrequest-error');
 const NotFoundError = require('../errors/not-found-error');
 const NotRightError = require('../errors/not-right-error');

@@ -1,9 +1,10 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const auth = require('./middlewares/auth');
+const { errors } = require('celebrate');
 const errorHandler = require('./errors/error-handler');
-const { celebrate, Joi, errors } = require('celebrate');
+
 const NotFoundError = require('./errors/not-found-error');
+
 mongoose.connect('mongodb://127.0.0.1:27017/mestodb', {
   useNewUrlParser: true,
 })

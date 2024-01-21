@@ -6,23 +6,23 @@ const userSchema = new mongoose.Schema({
     type: String,
     minlength: 2,
     maxlength: 30,
-    default:'Жак-Ив Кусто',
+    default: 'Жак-Ив Кусто',
   },
   about: {
     type: String,
     minlength: 2,
     maxlength: 30,
-    default:'Исследователь',
+    default: 'Исследователь',
   },
   avatar: {
     type: String,
-    default:'https://pictures.s3.yandex.net/resources/jacques-cousteau_1604399756.png',
+    default: 'https://pictures.s3.yandex.net/resources/jacques-cousteau_1604399756.png',
     validation: {
       validator(v) {
         return validator.isURL(v);
       },
       message: 'неверно введен путь к аватару',
-    }
+    },
   },
   email: {
     type: String,
@@ -33,7 +33,7 @@ const userSchema = new mongoose.Schema({
         return validator.isEmail(v);
       },
       message: 'неверно введен email',
-    }
+    },
   },
   password: {
     type: String,

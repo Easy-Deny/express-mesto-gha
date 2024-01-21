@@ -16,7 +16,7 @@ const cardSchema = new mongoose.Schema({
         return validator.isURL(v);
       },
       message: 'неверно введен путь к изображению',
-    }
+    },
   },
   owner: {
     type: mongoose.Schema.Types.ObjectId,
