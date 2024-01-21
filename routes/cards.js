@@ -5,8 +5,7 @@ const { celebrate, Joi } = require('celebrate');
 Router.post('/cards', celebrate({
   body: Joi.object().keys({
     name: Joi.string().required().min(2).max(30),
-    link: Joi.link().required(),
-    owner: Joi.string(),
+    link: Joi.string().required().pattern(/^(https?:\/\/)?([\w\.]+)\.([a-z]{2,6}\.?)(\/[\w\.]*)*\/?$/),
   }),
 }), createCard);
 Router.get('/cards', getCards);
