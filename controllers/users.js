@@ -6,6 +6,7 @@ const { getJwtToken, isAuthorized } = require('../utils/jwt')
 const BadRequestError = require('../errors/badrequest-error');
 const NotFoundError = require('../errors/not-found-error');
 const NotRightError = require('../errors/not-right-error');
+const ConflictError = require('../errors/conflict-error');
 
 const createUser = (req, res, next) => {
   const { name, about, avatar, email, password } = req.body;
@@ -23,7 +24,8 @@ const createUser = (req, res, next) => {
         //return res.status(400).send({ message: `Incorrect user info error: ${err.name}: ${err.message}` });
       }
       if (err.code === 11000) {
-        return res.status(409).send({ message: `user with an email address exists: ${err.name}: ${err.message}` });
+        next(new ConflictError(`user with an email address exists: ${err.name}: ${err.message}`));
+        //return res.status(409).send({ message: `user with an email address exists: ${err.name}: ${err.message}` });
       }
       next(err);
       //return res.status(500).send('Server Error');
