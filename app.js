@@ -24,7 +24,7 @@ app.use(userRouter);
 app.use(cardRouter);
 app.use(errors());
 app.all('*', (req, res, next) => {
-  throw new NotFoundError('404! Page not found');
+  next( new NotFoundError('404! Page not found'));
   //res.status(404).send({ message: '404! Page not found' });
 });
 app.use(errorHandler);
