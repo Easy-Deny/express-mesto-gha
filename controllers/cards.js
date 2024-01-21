@@ -2,6 +2,7 @@ const CardModel = require('../models/card');
 const BadRequestError = require('../errors/badrequest-error');
 const NotFoundError = require('../errors/not-found-error');
 const NotRightError = require('../errors/not-right-error');
+const ForbiddenError = require('../errors/forbidden-error');
 
 const createCard = (req, res, next) => {
   const { name, link } = req.body;
@@ -26,9 +27,10 @@ const getCards = (req, res, next) => {
     .then((cards) => {
       return res.status(200).send(cards);
     })
-    .catch(() => {
-      return res.status(500).send('Server Error');
-    });
+    .catch(next);
+  //.catch(() => {
+  //return res.status(500).send('Server Error');
+  //});
 }
 
 const deleteCardById = (req, res, next) => {
@@ -39,7 +41,7 @@ const deleteCardById = (req, res, next) => {
         //return res.status(404).send({ message: 'Card not found' });
       }
       if (!card.owner.equals(req.user._id)) {
-        throw new NotRightError('Card not deleted');
+        throw new ForbiddenError('Card not deleted');
       }
       card.deleteOne()
         .then(() => res.status(200).send(card))
