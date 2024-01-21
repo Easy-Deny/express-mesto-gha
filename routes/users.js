@@ -18,13 +18,13 @@ Router.post('/signup', celebrate({
     avatar: Joi.string().required().pattern(/^(https?:\/\/)?([\w\.]+)\.([a-z]{2,6}\.?)(\/[\w\.]*)*\/?$/),
     email: Joi.string().required().email(),
     password: Joi.string().required(),
-  }).unknown(true),
+  }),
 }), createUser);
 Router.use(auth);
 Router.get('/users', getUsers);
 Router.get('/users/:userId', celebrate({
   body: Joi.object().keys({
-    userId: Joi.string().required(),
+    userId: Joi.string().length(24).hex().required(),
   }),
 }), getUserById);
 Router.patch('/users/me', celebrate({
