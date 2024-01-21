@@ -1,9 +1,15 @@
-const { createUser, getUsers, getUserById, updateUserById, updateUserAvatarById, login } = require('../controllers/users');
+const { celebrate, Joi } = require('celebrate');
 const Router = require('express').Router();
+const {
+  createUser,
+  getUsers,
+  getUserById,
+  updateUserById,
+  updateUserAvatarById,
+  login,
+} = require('../controllers/users');
 const auth = require('../middlewares/auth');
 const errorHandler = require('../errors/error-handler');
-const { celebrate, Joi } = require('celebrate');
-//name, about, avatar, email, password
 
 Router.post('/signin', celebrate({
   body: Joi.object().keys({
