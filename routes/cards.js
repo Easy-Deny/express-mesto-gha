@@ -16,15 +16,15 @@ Router.delete('/cards/:cardId', celebrate({
 }), deleteCardById);
 Router.put('/cards/:cardId/likes', celebrate({
   params: Joi.object().keys({
-    cardId:  Joi.string().length(24).hex().required(),
+    cardId: Joi.string().length(24).hex().required(),
   }),
 }), likeCard);
 Router.delete('/cards/:cardId/likes',
-celebrate({
-  body: Joi.object().keys({
-    cardId: Joi.string(),
-  }),
-}), dislikeCard);
+  celebrate({
+    params: Joi.object().keys({
+      cardId: Joi.string().length(24).hex().required(),
+    }),
+  }), dislikeCard);
 
 module.exports = Router;
 
