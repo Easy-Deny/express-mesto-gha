@@ -49,9 +49,10 @@ const login = (req, res, next) => {
         return res.status(200).send({ token });
       })
     })
-    .catch((err) => {
-      return res.status(500).send('Server Error');
-    });
+    .catch(next);
+    //.catch((err) => {
+    //  return res.status(500).send('Server Error');
+    //});
 };
 
 const getUsers = (req, res, next) => {
@@ -61,9 +62,10 @@ const getUsers = (req, res, next) => {
     .then((users) => {
       return res.status(200).send(users);
     })
-    .catch(() => {
-      return res.status(500).send('Server Error');
-    });
+    .catch(next);
+    //.catch(() => {
+    //  return res.status(500).send('Server Error');
+    //});
 };
 
 const getUserById = (req, res, next) => {
