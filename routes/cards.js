@@ -10,8 +10,8 @@ Router.post('/cards', celebrate({
 }), createCard);
 Router.get('/cards', getCards);
 Router.delete('/cards/:cardId', celebrate({
-  body: Joi.object().keys({
-    cardId: Joi.string(),
+  params: Joi.object().keys({
+    cardId: Joi.string().length(24).hex().required(),
   }),
 }), deleteCardById);
 Router.put('/cards/:cardId/likes', celebrate({
