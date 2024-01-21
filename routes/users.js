@@ -15,7 +15,7 @@ Router.post('/signup', celebrate({
   body: Joi.object().keys({
     name: Joi.string().required().min(2).max(30),
     about: Joi.string().required(),
-    avatar: Joi.string().required(),
+    avatar: Joi.string().required().pattern(/^(https?:\/\/)?([\w\.]+)\.([a-z]{2,6}\.?)(\/[\w\.]*)*\/?$/),
     email: Joi.string().required().email(),
     password: Joi.string().required(),
   }).unknown(true),
