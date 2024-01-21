@@ -21,12 +21,12 @@ Router.post('/signup', celebrate({
   }),
 }), createUser);
 Router.use(auth);
-Router.get('/users', getUsers);
 Router.get('/users/:userId', celebrate({
   body: Joi.object().keys({
     userId: Joi.string().length(24).hex().required(),
   }),
 }), getUserById);
+Router.get('/users', getUsers);
 Router.patch('/users/me', celebrate({
   body: Joi.object().keys({
     userId: Joi.string().required(),
