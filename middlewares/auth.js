@@ -1,17 +1,16 @@
 const jwt = require('jsonwebtoken');
-const { isAuthorized } = require('../utils/jwt');
 
 const { JWT_SECRET = 'SECRET_KEY' } = process.env;
-const UnauthorizedError = require('../errors/unauthorized-error');
+const NotRightError = require('../errors/not-right-error');
 
 const auth = (req, res, next) => {
-  const token = req.headers.authorization;
-  if (!isAuthorized(token)) { next(new UnauthorizedError('not autorization')); }
+  const { authorization } = req.headers;
+  const token = authorization.replace('Bearer ', '');
   let payload;
   try {
     payload = jwt.verify(token, JWT_SECRET);
   } catch (e) {
-    return next(new UnauthorizedError('not autorization'));
+    return next(new NotRightError('not autorization'));
   }
   req.user = payload;
   return next();

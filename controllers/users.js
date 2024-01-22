@@ -22,7 +22,7 @@ const createUser = (req, res, next) => {
       email,
       password: hash,
     }))
-    .then((data) => res.status(201).send(data._id))
+    .then((data) => res.status(201).send(data._id, data.name, data.about, data.avatar, data.email))
     .catch((err) => {
       console.log(err);
       if (err.name === 'ValidationError') {
@@ -42,16 +42,16 @@ const login = (req, res, next) => {
       if (!user) {
         throw new NotRightError('user not found');
       }
-      bcrypt.compare(password, user.password, function(err, isValidPassword) {
-        if (!isValidPassword) {
-          throw (new NotRightError('password is not correct'));
-        }
-        const token = getJwtToken({ _id: user._id, email: user.email });
-        return res.status(200).send({ token });
-      })
+      return bcrypt.compare(password, user.password)
+        .then((matched) => {
+          if (!matched) {
+            return Promise.reject(new NotRightError('password is not correct'));
+          }
+          const token = getJwtToken({ _id: user._id });
+          return res.status(200).send({ token });
+        });
     })
     .catch(next);
-  //  return res.status(500).send('Server Error');
 };
 
 const getUsers = (req, res, next) => UserModel.find()
@@ -86,6 +86,11 @@ const updateUserById = (req, res, next) => UserModel
     next(err);
   });
 
+const updateUser = (req, res, next) => UserModel
+  .findById(req.user._id)
+  .then((data) => res.status(200).send(data))
+  .catch(next);
+
 const updateUserAvatarById = (req, res, next) => UserModel
   .findByIdAndUpdate(req.user, { avatar: req.body.avatar }, { new: true, runValidators: true })
   .then((data) => res.status(200).send(data))
@@ -102,6 +107,7 @@ module.exports = {
   getUsers,
   getUserById,
   updateUserById,
+  updateUser,
   updateUserAvatarById,
   login,
 };

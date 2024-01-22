@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 const { JWT_SECRET = 'SECRET_KEY' } = process.env;
 const UserModel = require('../models/user');
 
-const getJwtToken = (payload) => jwt.sign(payload, JWT_SECRET);
+const getJwtToken = (payload) => jwt.sign(payload, JWT_SECRET, { expiresIn: '7d' });
 
 const isAuthorized = (token) => {
   return jwt.verify(token, JWT_SECRET, function (err, decoded) {
@@ -13,9 +13,9 @@ const isAuthorized = (token) => {
         if (!user) return false;
         return true;
       })
-      .catch((err) => { return false })
+      .catch((err) => { return false; });
   });
-}
+};
 
 module.exports = {
   getJwtToken,

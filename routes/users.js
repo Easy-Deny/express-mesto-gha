@@ -5,6 +5,7 @@ const {
   getUsers,
   getUserById,
   updateUserById,
+  updateUser,
   updateUserAvatarById,
   login,
 } = require('../controllers/users');
@@ -33,6 +34,7 @@ Router.get('/users/:userId', celebrate({
   }),
 }), getUserById);
 Router.get('/users', getUsers);
+Router.get('/users/me', updateUser);
 Router.patch('/users/me', updateUserById);
 Router.patch('/users/me/avatar', celebrate({
   body: Joi.object().keys({
