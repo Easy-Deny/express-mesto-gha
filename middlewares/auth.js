@@ -5,6 +5,9 @@ const NotRightError = require('../errors/not-right-error');
 
 const auth = (req, res, next) => {
   const { authorization } = req.headers;
+  if (!authorization) {
+    return next(new NotRightError('not autorization'));
+  }
   const token = authorization.replace('Bearer ', '');
   let payload;
   try {

@@ -23,6 +23,7 @@ app.use(express.json());
 app.use(userRouter);
 app.use(cardRouter);
 app.use(errors());
+app.use(errorHandler);
 app.all('*', (req, res, next) => {
   next(new NotFoundError('404! Page not found'));
 });

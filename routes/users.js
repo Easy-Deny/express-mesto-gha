@@ -10,7 +10,6 @@ const {
   login,
 } = require('../controllers/users');
 const auth = require('../middlewares/auth');
-const errorHandler = require('../errors/error-handler');
 
 Router.post('/signin', celebrate({
   body: Joi.object().keys({
@@ -33,13 +32,16 @@ Router.get('/users/:userId', celebrate({
     userId: Joi.string().length(24).hex().required(),
   }),
 }), getUserById);
-Router.get('/users', getUsers);
 Router.get('/users/me', updateUser);
-Router.patch('/users/me', updateUserById);
+Router.get('/users', getUsers);
+Router.patch('/users/me', celebrate({
+  body: Joi.object().keys({
+    userId: Joi.string().length(24).hex().required(),
+  }),
+}), updateUserById);
 Router.patch('/users/me/avatar', celebrate({
   body: Joi.object().keys({
     avatar: Joi.string().required().pattern(/^(https?:\/\/)?([\w\.]+)\.([a-z]{2,6}\.?)(\/[\w\.]*)*\/?$/),
   }),
 }), updateUserAvatarById);
-Router.use(errorHandler);
 module.exports = Router;
