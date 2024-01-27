@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const { errors } = require('celebrate');
+const { requestLogger, errorLogger } = require('./middlewares/logger');
 const errorHandler = require('./errors/error-handler');
 
 const NotFoundError = require('./errors/not-found-error');
@@ -20,8 +21,10 @@ const userRouter = require('./routes/users');
 const cardRouter = require('./routes/cards');
 
 app.use(express.json());
+app.use(requestLogger);
 app.use(userRouter);
 app.use(cardRouter);
+app.use(errorLogger);
 app.use(errors());
 app.all('*', (req, res, next) => {
   next(new NotFoundError('404! Page not found'));
